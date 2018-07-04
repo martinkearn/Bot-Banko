@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Bot;
@@ -52,7 +53,11 @@ namespace AspNetCore_EchoBot_With_State
             {
                 // Use LUIS to extract intent and entities from the user's input text.
                 var luisResult = await Recognizer.Recognize<BankoLuisModel>(context.Activity.Text, new CancellationToken());
-
+                Dictionary<string, object> lD = new Dictionary<string, object>();
+                if (luisResult != null)
+                {
+                    lD.Add("luisResult", luisResult);
+                }
                 await context.SendActivity($"Top intent {luisResult.TopIntent().intent} with score {luisResult.TopIntent().score}. ");
 
                 //extract entities if they exist
@@ -60,21 +65,22 @@ namespace AspNetCore_EchoBot_With_State
                 var money = luisResult.Entities.money?[0].Number ?? -1;
                 var payee = luisResult.Entities.Payee?[0].ToString();
 
-                switch (luisResult.TopIntent().intent.ToString().ToLower())
+                //top level dispatch
+                switch (luisResult.TopIntent().intent)
                 {
-                    case "balance":
+                    case BankoLuisModel.Intent.Balance:
                         var randomBalance = new Random().Next(00, 5000);
                         await context.SendActivity($"Your balance is {randomBalance}");
                         break;
-                    case "transfer":
+                    case BankoLuisModel.Intent.Transfer:
                         //hard coding some entity values if they are null. TO DO use dialog to fill the gapes here
                         var accountLabelResolved = accountLabel ?? "Current";
                         var moneyResolved = (money != -1) ? money : new Random().Next(10, 500);
                         await context.SendActivity($"I'll transfer {money} from {accountLabelResolved}");
                         break;
-                    case "none":
-                        break;
+                    case BankoLuisModel.Intent.None:
                     default:
+                        await context.SendActivity($"I dont know what you want to do.");
                         break;
                 }
             }
