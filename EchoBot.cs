@@ -50,19 +50,33 @@ namespace AspNetCore_EchoBot_With_State
             // This bot is only handling Messages
             if (context.Activity.Type == ActivityTypes.Message)
             {
-                // Get the conversation state from the turn context
-                var state = context.GetConversationState<EchoState>();
-
-                // Bump the turn count. 
-                state.TurnCount++;
-
-                // Echo back to the user whatever they typed.
-                await context.SendActivity($"Turn {state.TurnCount}: You sent '{context.Activity.Text}'");
-
                 // Use LUIS to extract intent and entities from the user's input text.
                 var luisResult = await Recognizer.Recognize<BankoLuisModel>(context.Activity.Text, new CancellationToken());
 
                 await context.SendActivity($"Top intent {luisResult.TopIntent().intent} with score {luisResult.TopIntent().score}. ");
+
+                //extract entities if they exist
+                var accountLabel = luisResult.Entities.AccountLabel?[0].ToString();
+                var money = luisResult.Entities.money?[0].Number ?? -1;
+                var payee = luisResult.Entities.Payee?[0].ToString();
+
+                switch (luisResult.TopIntent().intent.ToString().ToLower())
+                {
+                    case "balance":
+                        var randomBalance = new Random().Next(00, 5000);
+                        await context.SendActivity($"Your balance is {randomBalance}");
+                        break;
+                    case "transfer":
+                        //hard coding some entity values if they are null. TO DO use dialog to fill the gapes here
+                        var accountLabelResolved = accountLabel ?? "Current";
+                        var moneyResolved = (money != -1) ? money : new Random().Next(10, 500);
+                        await context.SendActivity($"I'll transfer {money} from {accountLabelResolved}");
+                        break;
+                    case "none":
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }    

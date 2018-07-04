@@ -17,7 +17,11 @@
   ],
   "entities": [
     {
-      "name": "Account",
+      "name": "AccountLabel",
+      "roles": []
+    },
+    {
+      "name": "Payee",
       "roles": []
     }
   ],
@@ -40,34 +44,34 @@
   "patterns": [],
   "utterances": [
     {
-      "text": "can i move £2.50 from account ending 8994 to account ending 4896",
+      "text": "can i move £2.50 from savings to david kearn tomorrow",
       "intent": "Transfer",
       "entities": [
         {
-          "entity": "Account",
-          "startPos": 37,
-          "endPos": 40
+          "entity": "AccountLabel",
+          "startPos": 22,
+          "endPos": 28
         },
         {
-          "entity": "Account",
-          "startPos": 60,
-          "endPos": 63
+          "entity": "Payee",
+          "startPos": 33,
+          "endPos": 43
         }
       ]
     },
     {
-      "text": "can i move £2.50 from account ending 8994 to account ending 4896 tomorrow",
+      "text": "can i move £2.50 from the sole account to john jones",
       "intent": "Transfer",
       "entities": [
         {
-          "entity": "Account",
-          "startPos": 37,
-          "endPos": 40
+          "entity": "AccountLabel",
+          "startPos": 26,
+          "endPos": 29
         },
         {
-          "entity": "Account",
-          "startPos": 60,
-          "endPos": 63
+          "entity": "Payee",
+          "startPos": 42,
+          "endPos": 51
         }
       ]
     },
@@ -92,18 +96,18 @@
       "entities": []
     },
     {
-      "text": "i want to trabsfer £3.50 from account 1234 to account 5678",
+      "text": "i want to transfer £3.50 from joint account to amy griffiths",
       "intent": "Transfer",
       "entities": [
         {
-          "entity": "Account",
-          "startPos": 38,
-          "endPos": 41
+          "entity": "AccountLabel",
+          "startPos": 30,
+          "endPos": 34
         },
         {
-          "entity": "Account",
-          "startPos": 54,
-          "endPos": 57
+          "entity": "Payee",
+          "startPos": 47,
+          "endPos": 59
         }
       ]
     },
@@ -115,13 +119,7 @@
     {
       "text": "i'd like a balance on account 1234",
       "intent": "Balance",
-      "entities": [
-        {
-          "entity": "Account",
-          "startPos": 30,
-          "endPos": 33
-        }
-      ]
+      "entities": []
     },
     {
       "text": "list my accounts",
@@ -144,45 +142,45 @@
       "entities": []
     },
     {
-      "text": "please move £3.50 to my 1234 account",
+      "text": "please move £3.50 to my savings account",
       "intent": "Transfer",
       "entities": [
         {
-          "entity": "Account",
+          "entity": "AccountLabel",
           "startPos": 24,
-          "endPos": 27
+          "endPos": 30
         }
       ]
     },
     {
-      "text": "please transfer £3 from account ending 4321 to account ending 1234",
+      "text": "please transfer £3 from current account to jamie dalton tomorrow",
       "intent": "Transfer",
       "entities": [
         {
-          "entity": "Account",
-          "startPos": 39,
-          "endPos": 42
+          "entity": "AccountLabel",
+          "startPos": 24,
+          "endPos": 30
         },
         {
-          "entity": "Account",
-          "startPos": 62,
-          "endPos": 65
+          "entity": "Payee",
+          "startPos": 43,
+          "endPos": 54
         }
       ]
     },
     {
-      "text": "please trasnfer £3 from account ending 1234 to account ending 4321 tomorrow",
+      "text": "please transfer £3 from joint account to martin kearn",
       "intent": "Transfer",
       "entities": [
         {
-          "entity": "Account",
-          "startPos": 39,
-          "endPos": 42
+          "entity": "AccountLabel",
+          "startPos": 24,
+          "endPos": 28
         },
         {
-          "entity": "Account",
-          "startPos": 62,
-          "endPos": 65
+          "entity": "Payee",
+          "startPos": 41,
+          "endPos": 52
         }
       ]
     },
@@ -199,13 +197,7 @@
     {
       "text": "what are my recent transactions on account ending 8994",
       "intent": "None",
-      "entities": [
-        {
-          "entity": "Account",
-          "startPos": 50,
-          "endPos": 53
-        }
-      ]
+      "entities": []
     },
     {
       "text": "what are my saved recipients",
@@ -225,24 +217,12 @@
     {
       "text": "what is teh balance of account ending 1234",
       "intent": "Balance",
-      "entities": [
-        {
-          "entity": "Account",
-          "startPos": 38,
-          "endPos": 41
-        }
-      ]
+      "entities": []
     },
     {
       "text": "what is the balance of account 1234",
       "intent": "Balance",
-      "entities": [
-        {
-          "entity": "Account",
-          "startPos": 31,
-          "endPos": 34
-        }
-      ]
+      "entities": []
     },
     {
       "text": "what is the balance of my account",
@@ -257,13 +237,7 @@
     {
       "text": "whats the balance on account ending 8994",
       "intent": "Balance",
-      "entities": [
-        {
-          "entity": "Account",
-          "startPos": 36,
-          "endPos": 39
-        }
-      ]
+      "entities": []
     }
   ]
 }

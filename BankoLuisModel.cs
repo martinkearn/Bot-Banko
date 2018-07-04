@@ -22,7 +22,8 @@ namespace AspNetCore_EchoBot_With_State
         public class _Entities
         {
             // Simple entities
-            public string[] Account;
+            public string[] AccountLabel;
+            public string[] Payee;
 
             // Built-in entities
             public Microsoft.Bot.Builder.Ai.LUIS.DateTimeSpec[] datetime;
@@ -31,7 +32,8 @@ namespace AspNetCore_EchoBot_With_State
             // Instance
             public class _Instance
             {
-                public Microsoft.Bot.Builder.Ai.LUIS.InstanceData[] Account;
+                public Microsoft.Bot.Builder.Ai.LUIS.InstanceData[] AccountLabel;
+                public Microsoft.Bot.Builder.Ai.LUIS.InstanceData[] Payee;
                 public Microsoft.Bot.Builder.Ai.LUIS.InstanceData[] datetime;
                 public Microsoft.Bot.Builder.Ai.LUIS.InstanceData[] money;
             }
