@@ -1,0 +1,269 @@
+{
+  "luis_schema_version": "3.0.0",
+  "versionId": "0.1",
+  "name": "Banko",
+  "desc": "A sample app for conversation-as-a-platform in the banking sector",
+  "culture": "en-us",
+  "intents": [
+    {
+      "name": "Balance"
+    },
+    {
+      "name": "None"
+    },
+    {
+      "name": "Transfer"
+    }
+  ],
+  "entities": [
+    {
+      "name": "Account",
+      "roles": []
+    }
+  ],
+  "composites": [],
+  "closedLists": [],
+  "patternAnyEntities": [],
+  "regex_entities": [],
+  "prebuiltEntities": [
+    {
+      "name": "datetimeV2",
+      "roles": []
+    },
+    {
+      "name": "money",
+      "roles": []
+    }
+  ],
+  "model_features": [],
+  "regex_features": [],
+  "patterns": [],
+  "utterances": [
+    {
+      "text": "can i move £2.50 from account ending 8994 to account ending 4896",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 37,
+          "endPos": 40
+        },
+        {
+          "entity": "Account",
+          "startPos": 60,
+          "endPos": 63
+        }
+      ]
+    },
+    {
+      "text": "can i move £2.50 from account ending 8994 to account ending 4896 tomorrow",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 37,
+          "endPos": 40
+        },
+        {
+          "entity": "Account",
+          "startPos": 60,
+          "endPos": 63
+        }
+      ]
+    },
+    {
+      "text": "how much money do i have",
+      "intent": "Balance",
+      "entities": []
+    },
+    {
+      "text": "i want to move £40.00",
+      "intent": "Transfer",
+      "entities": []
+    },
+    {
+      "text": "i want to move money",
+      "intent": "Transfer",
+      "entities": []
+    },
+    {
+      "text": "i want to move some money",
+      "intent": "Transfer",
+      "entities": []
+    },
+    {
+      "text": "i want to trabsfer £3.50 from account 1234 to account 5678",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 38,
+          "endPos": 41
+        },
+        {
+          "entity": "Account",
+          "startPos": 54,
+          "endPos": 57
+        }
+      ]
+    },
+    {
+      "text": "i want to transfer £35 next monday",
+      "intent": "Transfer",
+      "entities": []
+    },
+    {
+      "text": "i'd like a balance on account 1234",
+      "intent": "Balance",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 30,
+          "endPos": 33
+        }
+      ]
+    },
+    {
+      "text": "list my accounts",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "please can i have a balance",
+      "intent": "Balance",
+      "entities": []
+    },
+    {
+      "text": "please list my accounts",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "please list my recipients",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "please move £3.50 to my 1234 account",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 24,
+          "endPos": 27
+        }
+      ]
+    },
+    {
+      "text": "please transfer £3 from account ending 4321 to account ending 1234",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 39,
+          "endPos": 42
+        },
+        {
+          "entity": "Account",
+          "startPos": 62,
+          "endPos": 65
+        }
+      ]
+    },
+    {
+      "text": "please trasnfer £3 from account ending 1234 to account ending 4321 tomorrow",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 39,
+          "endPos": 42
+        },
+        {
+          "entity": "Account",
+          "startPos": 62,
+          "endPos": 65
+        }
+      ]
+    },
+    {
+      "text": "what are my account numbers",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "what are my recent transactions",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "what are my recent transactions on account ending 8994",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 50,
+          "endPos": 53
+        }
+      ]
+    },
+    {
+      "text": "what are my saved recipients",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "what is my balance",
+      "intent": "Balance",
+      "entities": []
+    },
+    {
+      "text": "what is my current balance",
+      "intent": "Balance",
+      "entities": []
+    },
+    {
+      "text": "what is teh balance of account ending 1234",
+      "intent": "Balance",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 38,
+          "endPos": 41
+        }
+      ]
+    },
+    {
+      "text": "what is the balance of account 1234",
+      "intent": "Balance",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 31,
+          "endPos": 34
+        }
+      ]
+    },
+    {
+      "text": "what is the balance of my account",
+      "intent": "Balance",
+      "entities": []
+    },
+    {
+      "text": "what went out of my account yesterday",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "whats the balance on account ending 8994",
+      "intent": "Balance",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 36,
+          "endPos": 39
+        }
+      ]
+    }
+  ]
+}

@@ -60,19 +60,9 @@ namespace AspNetCore_EchoBot_With_State
                 await context.SendActivity($"Turn {state.TurnCount}: You sent '{context.Activity.Text}'");
 
                 // Use LUIS to extract intent and entities from the user's input text.
-                var luisResult = await Recognizer.Recognize<HowHappyLUISModel>(context.Activity.Text, new CancellationToken());
+                var luisResult = await Recognizer.Recognize<BankoLuisModel>(context.Activity.Text, new CancellationToken());
 
-                var entities = string.Empty;
-                if (luisResult.Entities.happiness != null) entities += luisResult.Entities.happiness[0];
-                if (luisResult.Entities.neutral != null) entities += luisResult.Entities.neutral[0];
-                if (luisResult.Entities.sadness != null) entities += luisResult.Entities.sadness[0];
-                if (luisResult.Entities.surprise != null) entities += luisResult.Entities.surprise[0];
-                if (luisResult.Entities.anger != null) entities += luisResult.Entities.anger[0];
-                if (luisResult.Entities.contempt != null) entities += luisResult.Entities.contempt[0];
-                if (luisResult.Entities.disgust != null) entities += luisResult.Entities.disgust[0];
-                if (luisResult.Entities.emotion != null) entities += luisResult.Entities.emotion.ToString();
-
-                await context.SendActivity($"Top intent {luisResult.TopIntent().intent} with score {luisResult.TopIntent().score}. Entities: {entities}");
+                await context.SendActivity($"Top intent {luisResult.TopIntent().intent} with score {luisResult.TopIntent().score}. ");
             }
         }
     }    
