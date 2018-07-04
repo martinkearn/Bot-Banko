@@ -51,6 +51,12 @@ namespace AspNetCore_EchoBot_With_State
             // This bot is only handling Messages
             if (context.Activity.Type == ActivityTypes.Message)
             {
+                // Get conversation state and establish a dialog context.
+
+                var state = ConversationState<ConversationData>.Get(context);
+
+                //var dc = BookATable.Instance.CreateContext(context, state.DialogState);
+
                 // Use LUIS to extract intent and entities from the user's input text.
                 var luisResult = await Recognizer.Recognize<BankoLuisModel>(context.Activity.Text, new CancellationToken());
                 Dictionary<string, object> lD = new Dictionary<string, object>();
