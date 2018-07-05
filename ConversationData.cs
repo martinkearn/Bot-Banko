@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AspNetCore_EchoBot_With_State
+namespace Banko
 {
     /// <summary>
     /// Class for storing conversation state.

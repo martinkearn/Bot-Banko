@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace AspNetCore_EchoBot_With_State
+namespace Banko
 {
     public class Program
     {
