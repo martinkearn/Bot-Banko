@@ -1,4 +1,6 @@
 using System;
+using Banko.Bots;
+using Banko.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Bot.Builder.BotFramework;
@@ -30,7 +32,7 @@ namespace Banko
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddBot<BankoBot>(options =>
+            services.AddBot<MainBot>(options =>
             {
                 options.CredentialProvider = new ConfigurationCredentialProvider(Configuration);
 
@@ -41,7 +43,7 @@ namespace Banko
                 // an "Ooops" message is sent. 
                 options.Middleware.Add(new CatchExceptionMiddleware<Exception>(async (context, exception) =>
                 {
-                    await context.TraceActivity("EchoBot Exception", exception);
+                    await context.TraceActivity("Banko Bot Exception", exception);
                     await context.SendActivity("Sorry, it looks like something went wrong!");
                 }));
 

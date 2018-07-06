@@ -6,7 +6,7 @@
 // </auto-generated>
 using Newtonsoft.Json;
 using System.Collections.Generic;
-namespace Banko
+namespace Banko.Models
 {
     public class BankoLuisModel: Microsoft.Bot.Builder.Core.Extensions.IRecognizerConvert
     {

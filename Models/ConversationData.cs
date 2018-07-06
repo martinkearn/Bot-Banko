@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Banko
+namespace Banko.Models
 {
     /// <summary>
     /// Class for storing conversation state.
@@ -11,7 +11,5 @@ namespace Banko
         /// Property for storing dialog state for the book a table dialog.
         /// </summary>
         public Dictionary<string, object> DialogState { get; set; } = new Dictionary<string, object>();
-
-        public object ReservationData { get; set; }
     }
 }
