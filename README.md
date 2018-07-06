@@ -1,33 +1,28 @@
-## Use Azure app service editor
+# Banko
+This is a very simple bot used to demonstrate several [Cognitive Services Luis](https://azure.microsoft.com/en-us/services/cognitive-services/language-understanding-intelligent-service/) capabilities with the [C# Bot Framework V4 SDK](https://docs.microsoft.com/en-us/azure/bot-service/?view=azure-bot-service-4.0) and [Azure Bot Service](https://azure.microsoft.com/en-us/services/bot-service/). 
 
-1. make code change in the online editor
-2. open the console window and run
+This was written in July 2018 whilst the V4 SDK is still 'preview' so may not be accurate in the future.
 
-```
-build.cmd
-```
+This sample demonstrates:
+- *Luis Intent detection* 
+	* Using `LuisRecognizer` not `LuisRecognizerMiddleware` 
+	* Using Luis in middleware means every single message will go via Luis which is not necesray and costly in this scenario because once we have the intent and initial entities we no longer require Luis
+- *Luis entity extraction*; getting the entities we have from the initial Luis utterance
+- *Entity completion*; using bot dialogs to complete entities that were missing from initial Luis utterance
+* *Basic bot dialogs with waterfall steps*
 
-## Use Visual Studio 
+## The Banko Concept
+The bot is built around a very typical banking scenario which has two main capabilities:
+- Check balance
+- Make a transfer
 
-### Build and debug
-1. download source code zip and extract source in local folder
-2. open {PROJ_NAME}.sln in Visual Studio
-3. build and run the bot
-4. download and run [botframework-emulator](https://emulator.botframework.com/)
-5. connect the emulator to http://localhost:3987
+### Using Make a Transfer
+To make a transfer, the user must provide four different entities. These can be included in the initial utterance; if they are not, the bot will use a dialog to complete them:
+- *AccountLabel*; a [simple Luis entity](https://docs.microsoft.com/en-gb/azure/cognitive-services/LUIS/luis-concept-entity-types) to represent the nick name for the account to transfer frpm i.e. 'Joint', 'Savings', 'Current' or 'Sole' 
+- *Money*; a [pre-built Luis Currency entity](https://docs.microsoft.com/en-gb/azure/cognitive-services/LUIS/luis-reference-prebuilt-currency) to represen the amount to be transferred
+- *Date*; a [pre-built Luis DatetimeV2 entity](https://docs.microsoft.com/en-gb/azure/cognitive-services/LUIS/luis-reference-prebuilt-datetimev2) to represent the date the transfer should take place
+- *Payee*; a [simple Luis entity](https://docs.microsoft.com/en-gb/azure/cognitive-services/LUIS/luis-concept-entity-types) to represent the label for the payment receipient. This will typically be a name or company name (The Luis model has very limited training here, so only the exmaples below are likely to work)
 
-### Publish back
-
-In Visual Studio, right click on {PROJ_NAME} and select 'Publish'
-
-For first time publish after downloading source code
-1. In the publish profiles tab, click 'Import'
-2. Browse to 'PostDeployScripts' and pick '{SITE_NAME}.publishSettings'
-
-
-## Use continuous integration
-
-If you have setup continuous integration, then your bot will automatically deployed when new changes are pushed to the source repository.
-
-
-
+The Make a Transfer feature can be invoked using natural language including some, all or none or the required entities. Here are some exmaples:
+- *"Make a transfer"*; no entities just the `Transfer` intent
+- *"Make a transfer from the joint account"*: The `Transfer` intent with the `AccountLabel` entity.
