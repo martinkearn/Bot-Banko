@@ -88,7 +88,10 @@ namespace Banko.Bots
                             await context.SendActivity($"I dont know what you want to do. Type `make a transfer` or `get a balance` to get started.");
                             break;
                     }
+                    
                 }
+
+
             }
 
         }

@@ -75,6 +75,14 @@ namespace Banko.Dialogs
                         dc.ActiveDialog.State = new Dictionary<string,object>();
                     }
 
+                    // Display user's choice
+                    await dc.Context.SendActivity("OK, we're going to make a transfer.");
+
+                    await next();
+                },
+                async (dc, args, next) =>
+                {
+                    // Verify or ask for AccountLabel
                     if (dc.ActiveDialog.State.ContainsKey(Keys.AccountLabel))
                     {
                         // If we already have the account label, continue on to the next waterfall step.
@@ -92,6 +100,7 @@ namespace Banko.Dialogs
                 },
                 async (dc, args, next) =>
                 {
+                    // Capture AccountLabel to state
                     if (!dc.ActiveDialog.State.ContainsKey(Keys.AccountLabel))
                     {
                         // Update state from the prompt result.
@@ -105,8 +114,7 @@ namespace Banko.Dialogs
                 {
                     // Confirm the transfer.
                     await dc.Prompt(Keys.Confirm,
-                        $"Ok. I'll make this transfer, is this correct?" +
-                        $"from {dc.ActiveDialog.State[Keys.AccountLabel]} ", 
+                        $"Ok. I'll make this transfer: From {dc.ActiveDialog.State[Keys.AccountLabel]}, is this correct?", 
                         new PromptOptions
                         {
                             RetryPromptString = "Should I make the transfer for you? Please enter `yes` or `no`.",
@@ -131,8 +139,17 @@ namespace Banko.Dialogs
                     else
                     {
                         // Cancel the reservation.
-                        await dc.Context.SendActivity("Okay. We have canceled the transfer.");
+                        await dc.Context.SendActivity("OK, we have canceled the transfer.");
                     }
+
+                    await next();
+                },
+                async (dc, args, next) =>
+                {
+                    // Prompt the user to do something else
+                    await dc.Context.SendActivity("OK, we're done here. What is next?");
+
+                    // No await Next(); because this is the end of the dialog so we don't want to wait for anything
                 }
             });
         }
