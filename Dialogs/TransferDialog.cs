@@ -42,6 +42,20 @@ namespace Banko.Dialogs
             public const string Confirm = "confirmation";
         }
 
+        private static Task MoneyValidator(ITurnContext context, NumberResult<int> toValidate)
+        {
+            if (toValidate.Value < 0)
+            {
+                toValidate.Status = PromptStatus.TooSmall;
+            }
+            else
+            {
+                toValidate.Status = PromptStatus.Recognized;
+            }
+
+            return Task.CompletedTask;
+        }
+
 
         /// <summary>
         /// Creates a new dialog instance.
@@ -50,7 +64,7 @@ namespace Banko.Dialogs
         {
             // Add the prompts we'll be using in our dialog.
             Add(Keys.AccountLabel, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
-            Add(Keys.Money, new Microsoft.Bot.Builder.Dialogs.NumberPrompt<decimal>(Culture.English, null));
+            Add(Keys.Money, new Microsoft.Bot.Builder.Dialogs.NumberPrompt<int>(Culture.English, MoneyValidator));
             //Add(Keys.Payee, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
             //Add(Keys.Date, new Microsoft.Bot.Builder.Dialogs.DateTimePrompt(Culture.English, null));
             Add(Keys.Confirm, new Microsoft.Bot.Builder.Dialogs.ConfirmPrompt(Culture.English));
@@ -64,8 +78,7 @@ namespace Banko.Dialogs
                     // Initialize state.
                     if(args!=null && args.ContainsKey(Keys.LuisArgs))
                     {
-                        // Add any LUIS entities to the active dialog state.
-                        // Remove any values that don't validate, and convert the remainder to a dictionary.
+                        // Add any LUIS entities to the active dialog state. Remove any values that don't validate, and convert the remainder to a dictionary.
                         var entities = (BankoLuisModel._Entities)args[Keys.LuisArgs];
                         dc.ActiveDialog.State = ValidateLuisArgs(entities);
                     }
@@ -82,6 +95,31 @@ namespace Banko.Dialogs
                 },
                 async (dc, args, next) =>
                 {
+                    // Verify or ask for Money
+                    if (dc.ActiveDialog.State.ContainsKey(Keys.Money))
+                    {
+                        await next();
+                    }
+                    else
+                    {
+                        var promptOptions = new PromptOptions(){RetryPromptString = "How much do you want to transfer? You can say a number, for example 23, 100, 10 or ten (BUG support Int only, not a Double or Decimal. Dont use currency symbols)"};
+                        await dc.Prompt(Keys.Money,"How much?", promptOptions);
+                    }
+                },
+                async (dc, args, next) =>
+                {
+                    // Capture Money to state
+                    if (!dc.ActiveDialog.State.ContainsKey(Keys.Money))
+                    {
+                        //BUG: will not recognise double or decimal ... only int, need to research
+                        var answer = (int)args["Value"];
+                        dc.ActiveDialog.State[Keys.Money] = answer;
+                    }
+
+                    await next();
+                },
+                async (dc, args, next) =>
+                {
                     // Verify or ask for AccountLabel
                     if (dc.ActiveDialog.State.ContainsKey(Keys.AccountLabel))
                     {
@@ -89,11 +127,8 @@ namespace Banko.Dialogs
                     }
                     else
                     {
-                        await dc.Prompt(Keys.AccountLabel,
-                            "Which account?", new PromptOptions
-                            {
-                                RetryPromptString = "Which account do you want to transfer from? You can say Joint, Current, Savings etc",
-                            });
+                        var promptOptions = new PromptOptions(){RetryPromptString = "Which account do you want to transfer from? For exmaple Joint, Current, Savings etc"};
+                        await dc.Prompt(Keys.AccountLabel,"Which account?", promptOptions);
                     }
                 },
                 async (dc, args, next) =>
@@ -109,40 +144,10 @@ namespace Banko.Dialogs
                 },
                 async (dc, args, next) =>
                 {
-                    // Verify or ask for Money
-                    if (dc.ActiveDialog.State.ContainsKey(Keys.Money))
-                    {
-                        await next();
-                    }
-                    else
-                    {
-                        await dc.Prompt(Keys.Money,
-                            "How much?", new PromptOptions
-                            {
-                                RetryPromptString = "How much do you want to transfer? You can say £20 or similar",
-                            });
-                    }
-                },
-                async (dc, args, next) =>
-                {
-                    // Capture Money to state
-                    if (!dc.ActiveDialog.State.ContainsKey(Keys.Money))
-                    {
-                        var answer = (string)args["Value"];
-                        dc.ActiveDialog.State[Keys.Money] = answer;
-                    }
-
-                    await next();
-                },
-                async (dc, args, next) =>
-                {
                     // Confirm the transfer.
-                    await dc.Prompt(Keys.Confirm,
-                        $"Ok. I'll make this transfer: {dc.ActiveDialog.State[Keys.Money]} from {dc.ActiveDialog.State[Keys.AccountLabel]}, is this correct?", 
-                        new PromptOptions
-                        {
-                            RetryPromptString = "Should I make the transfer for you? Please enter `yes` or `no`.",
-                        });
+                    var promptOptions = new PromptOptions(){RetryPromptString = "Should I make the transfer for you? Please enter `yes` or `no`."};
+                    var promptBody = $"Ok, I'll transfer `{dc.ActiveDialog.State[Keys.Money]}` from `{dc.ActiveDialog.State[Keys.AccountLabel]}`, is this correct?";
+                    await dc.Prompt(Keys.Confirm, promptBody, promptOptions);
                 },
                 async (dc, args, next) =>
                 {
