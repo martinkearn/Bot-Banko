@@ -36,7 +36,7 @@ namespace Banko.Dialogs
             public const string LuisArgs = "LuisEntities";
 
             public const string AccountLabel = "AccountLabel";
-            //public const string Money = "money";
+            public const string Money = "money";
             //public const string Payee = "Payee";
             //public const string Date = "datetimeV2";
             public const string Confirm = "confirmation";
@@ -50,7 +50,7 @@ namespace Banko.Dialogs
         {
             // Add the prompts we'll be using in our dialog.
             Add(Keys.AccountLabel, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
-            //Add(Keys.Money, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
+            Add(Keys.Money, new Microsoft.Bot.Builder.Dialogs.NumberPrompt<decimal>(Culture.English, null));
             //Add(Keys.Payee, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
             //Add(Keys.Date, new Microsoft.Bot.Builder.Dialogs.DateTimePrompt(Culture.English, null));
             Add(Keys.Confirm, new Microsoft.Bot.Builder.Dialogs.ConfirmPrompt(Culture.English));
@@ -85,16 +85,14 @@ namespace Banko.Dialogs
                     // Verify or ask for AccountLabel
                     if (dc.ActiveDialog.State.ContainsKey(Keys.AccountLabel))
                     {
-                        // If we already have the account label, continue on to the next waterfall step.
                         await next();
                     }
                     else
                     {
-                        // Otherwise, query for the information.
                         await dc.Prompt(Keys.AccountLabel,
                             "Which account?", new PromptOptions
                             {
-                                RetryPromptString = "Which account do you want to transfer from (Joint, Current, Savings etc)",
+                                RetryPromptString = "Which account do you want to transfer from? You can say Joint, Current, Savings etc",
                             });
                     }
                 },
@@ -103,7 +101,6 @@ namespace Banko.Dialogs
                     // Capture AccountLabel to state
                     if (!dc.ActiveDialog.State.ContainsKey(Keys.AccountLabel))
                     {
-                        // Update state from the prompt result.
                         var answer = (string)args["Value"];
                         dc.ActiveDialog.State[Keys.AccountLabel] = answer;
                     }
@@ -112,9 +109,36 @@ namespace Banko.Dialogs
                 },
                 async (dc, args, next) =>
                 {
+                    // Verify or ask for Money
+                    if (dc.ActiveDialog.State.ContainsKey(Keys.Money))
+                    {
+                        await next();
+                    }
+                    else
+                    {
+                        await dc.Prompt(Keys.Money,
+                            "How much?", new PromptOptions
+                            {
+                                RetryPromptString = "How much do you want to transfer? You can say £20 or similar",
+                            });
+                    }
+                },
+                async (dc, args, next) =>
+                {
+                    // Capture Money to state
+                    if (!dc.ActiveDialog.State.ContainsKey(Keys.Money))
+                    {
+                        var answer = (string)args["Value"];
+                        dc.ActiveDialog.State[Keys.Money] = answer;
+                    }
+
+                    await next();
+                },
+                async (dc, args, next) =>
+                {
                     // Confirm the transfer.
                     await dc.Prompt(Keys.Confirm,
-                        $"Ok. I'll make this transfer: From {dc.ActiveDialog.State[Keys.AccountLabel]}, is this correct?", 
+                        $"Ok. I'll make this transfer: {dc.ActiveDialog.State[Keys.Money]} from {dc.ActiveDialog.State[Keys.AccountLabel]}, is this correct?", 
                         new PromptOptions
                         {
                             RetryPromptString = "Should I make the transfer for you? Please enter `yes` or `no`.",
@@ -163,13 +187,24 @@ namespace Banko.Dialogs
         {
             var result = new Dictionary<string, object>();
 
-            // Check Account Label
+            // Check AccountLabel
             if (entities?.AccountLabel?.Any() is true)
             {
                 var accountLabel = entities.AccountLabel.FirstOrDefault(n => !string.IsNullOrWhiteSpace(n));
                 if (accountLabel != null)
                 {
                     result[Keys.AccountLabel] = accountLabel;
+                }
+            }
+
+            // Check Money
+            if (entities?.money?.Any() is true)
+            {
+                var number = entities.money.FirstOrDefault().Number;
+                if (number != 0.0)
+                {
+                    // LUIS recognizes numbers as doubles. Convert to decimal.
+                    result[Keys.Money] = Convert.ToDecimal(number);
                 }
             }
 

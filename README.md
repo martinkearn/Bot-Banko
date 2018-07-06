@@ -16,6 +16,12 @@ The bot is built around a very typical banking scenario which has two main capab
 * Check balance
 * Make a transfer
 
+### Check Balance
+Simple intent that displays a made-up balance for the user's account
+
+To invoke the Check Balance feature
+* __"Check my balance"__; no entities just the `Balance` intent
+
 ### Using Make a Transfer
 To make a transfer, the user must provide four different entities. These can be included in the initial utterance; if they are not, the bot will use a dialog to complete them:
 * __AccountLabel__; a [simple Luis entity](https://docs.microsoft.com/en-gb/azure/cognitive-services/LUIS/luis-concept-entity-types) to represent the nick name for the account to transfer from i.e. 'Joint', 'Savings', 'Current' or 'Sole' 
@@ -24,5 +30,6 @@ To make a transfer, the user must provide four different entities. These can be 
 * __Payee__; a [simple Luis entity](https://docs.microsoft.com/en-gb/azure/cognitive-services/LUIS/luis-concept-entity-types) to represent the label for the payment recipient. This will typically be a name or company name (The Luis model has very limited training here, so only the examples below are likely to work)
 
 The Make a Transfer feature can be invoked using natural language including some, all or none or the required entities. Here are some examples:
-* __"Make a transfer"__; no entities just the `Transfer` intent
-* __"Make a transfer from the joint account"__; the `Transfer` intent with the `AccountLabel` entity.
+* __"I want to make a transfer"__; the `Transfer` intent without any entities.
+* __"Transfer from the joint account"__; the `Transfer` intent with the `AccountLabel` entity.
+* __"Transfer £20 from the joint account"__; the `Transfer` intent with the `AccountLabel` and `Money` entities.
