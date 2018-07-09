@@ -111,7 +111,7 @@ namespace Banko.Dialogs
                     // Capture Money to state
                     if (!dc.ActiveDialog.State.ContainsKey(Keys.Money))
                     {
-                        //BUG: will not recognise double or decimal ... only int, need to research
+                        //BUG: will not recognise double or decimal as a valid number response ... only int, need to research why this is
                         var answer = (int)args["Value"];
                         dc.ActiveDialog.State[Keys.Money] = answer;
                     }
