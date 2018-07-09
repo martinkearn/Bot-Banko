@@ -1,4 +1,5 @@
 ﻿using Banko.Models;
+using Banko.Helpers;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Core.Extensions;
 using Microsoft.Bot.Builder.Dialogs;
@@ -38,22 +39,8 @@ namespace Banko.Dialogs
             public const string AccountLabel = "AccountLabel";
             public const string Money = "money";
             //public const string Payee = "Payee";
-            //public const string Date = "datetimeV2";
+            public const string Date = "datetimeV2";
             public const string Confirm = "confirmation";
-        }
-
-        private static Task MoneyValidator(ITurnContext context, NumberResult<int> toValidate)
-        {
-            if (toValidate.Value < 0)
-            {
-                toValidate.Status = PromptStatus.TooSmall;
-            }
-            else
-            {
-                toValidate.Status = PromptStatus.Recognized;
-            }
-
-            return Task.CompletedTask;
         }
 
 
@@ -64,9 +51,9 @@ namespace Banko.Dialogs
         {
             // Add the prompts we'll be using in our dialog.
             Add(Keys.AccountLabel, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
-            Add(Keys.Money, new Microsoft.Bot.Builder.Dialogs.NumberPrompt<int>(Culture.English, MoneyValidator));
+            Add(Keys.Money, new Microsoft.Bot.Builder.Dialogs.NumberPrompt<int>(Culture.English, Validators.MoneyValidator));
             //Add(Keys.Payee, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
-            //Add(Keys.Date, new Microsoft.Bot.Builder.Dialogs.DateTimePrompt(Culture.English, null));
+            Add(Keys.Date, new Microsoft.Bot.Builder.Dialogs.DateTimePrompt(Culture.English, Validators.DateTimeValidator));
             Add(Keys.Confirm, new Microsoft.Bot.Builder.Dialogs.ConfirmPrompt(Culture.English));
 
             // Define and add the waterfall steps for our dialog.
@@ -80,7 +67,7 @@ namespace Banko.Dialogs
                     {
                         // Add any LUIS entities to the active dialog state. Remove any values that don't validate, and convert the remainder to a dictionary.
                         var entities = (BankoLuisModel._Entities)args[Keys.LuisArgs];
-                        dc.ActiveDialog.State = ValidateLuisArgs(entities);
+                        dc.ActiveDialog.State = Validators.LuisValidator(entities);
                     }
                     else
                     {
@@ -120,6 +107,39 @@ namespace Banko.Dialogs
                 },
                 async (dc, args, next) =>
                 {
+                    // Verify or ask for Date
+                    if (dc.ActiveDialog.State.ContainsKey(Keys.Date))
+                    {
+                        // If we already have the transfer date, continue on to the next waterfall step.
+                        await next();
+                    }
+                    else
+                    {
+                        // Otherwise, query for the transfer date and time.
+                        await dc.Prompt(Keys.Date,
+                            "When do you want the transfer to happen?", new PromptOptions
+                            {
+                                RetryPromptString = "Please enter a date and time for the transfer."
+                            });
+                    }
+
+                },
+                async (dc, args, next) =>
+                {
+                    // Capture Date to state
+                    if (!dc.ActiveDialog.State.ContainsKey(Keys.Date))
+                    {
+                        // Update state with the prompt result.
+                        // The prompt can return multiple interpretations of the date entered. For now, just use the first one.
+                        var answer = args["Resolution"] as List<DateTimeResult.DateTimeResolution>;
+                        var date = Converters.TimexToDateConverter(answer[0].Timex);
+                        dc.ActiveDialog.State[Keys.Date] = date.ToLongDateString();
+                    }
+
+                    await next();
+                },
+                async (dc, args, next) =>
+                {
                     // Verify or ask for AccountLabel
                     if (dc.ActiveDialog.State.ContainsKey(Keys.AccountLabel))
                     {
@@ -146,7 +166,7 @@ namespace Banko.Dialogs
                 {
                     // Confirm the transfer.
                     var promptOptions = new PromptOptions(){RetryPromptString = "Should I make the transfer for you? Please enter `yes` or `no`."};
-                    var promptBody = $"Ok, I'll transfer `{dc.ActiveDialog.State[Keys.Money]}` from `{dc.ActiveDialog.State[Keys.AccountLabel]}`, is this correct?";
+                    var promptBody = $"Ok, I'll transfer `{dc.ActiveDialog.State[Keys.Money]}` from `{dc.ActiveDialog.State[Keys.AccountLabel]}` on `{dc.ActiveDialog.State[Keys.Date]}`, is this correct?";
                     await dc.Prompt(Keys.Confirm, promptBody, promptOptions);
                 },
                 async (dc, args, next) =>
@@ -183,37 +203,6 @@ namespace Banko.Dialogs
             });
         }
 
-        /// <summary>
-        /// Check whether each entity is valid and return valid ones in a dictionary.
-        /// </summary>
-        /// <param name="entities">The LUIS entities from the input arguments.</param>
-        /// <returns>A dictionary of the valid entities.</returns>
-        private Dictionary<string, object> ValidateLuisArgs(BankoLuisModel._Entities entities)
-        {
-            var result = new Dictionary<string, object>();
 
-            // Check AccountLabel
-            if (entities?.AccountLabel?.Any() is true)
-            {
-                var accountLabel = entities.AccountLabel.FirstOrDefault(n => !string.IsNullOrWhiteSpace(n));
-                if (accountLabel != null)
-                {
-                    result[Keys.AccountLabel] = accountLabel;
-                }
-            }
-
-            // Check Money
-            if (entities?.money?.Any() is true)
-            {
-                var number = entities.money.FirstOrDefault().Number;
-                if (number != 0.0)
-                {
-                    // LUIS recognizes numbers as doubles. Convert to decimal.
-                    result[Keys.Money] = Convert.ToDecimal(number);
-                }
-            }
-
-            return result;
-        }
     }
 }
