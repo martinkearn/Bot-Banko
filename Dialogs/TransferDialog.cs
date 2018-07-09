@@ -38,7 +38,7 @@ namespace Banko.Dialogs
 
             public const string AccountLabel = "AccountLabel";
             public const string Money = "money";
-            //public const string Payee = "Payee";
+            public const string Payee = "Payee";
             public const string Date = "datetimeV2";
             public const string Confirm = "confirmation";
         }
@@ -52,8 +52,8 @@ namespace Banko.Dialogs
             // Add the prompts we'll be using in our dialog.
             Add(Keys.AccountLabel, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
             Add(Keys.Money, new Microsoft.Bot.Builder.Dialogs.NumberPrompt<int>(Culture.English, Validators.MoneyValidator));
-            //Add(Keys.Payee, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
             Add(Keys.Date, new Microsoft.Bot.Builder.Dialogs.DateTimePrompt(Culture.English, Validators.DateTimeValidator));
+            Add(Keys.Payee, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
             Add(Keys.Confirm, new Microsoft.Bot.Builder.Dialogs.ConfirmPrompt(Culture.English));
 
             // Define and add the waterfall steps for our dialog.
@@ -164,9 +164,33 @@ namespace Banko.Dialogs
                 },
                 async (dc, args, next) =>
                 {
+                    // Verify or ask for Payee
+                    if (dc.ActiveDialog.State.ContainsKey(Keys.Payee))
+                    {
+                        await next();
+                    }
+                    else
+                    {
+                        var promptOptions = new PromptOptions(){RetryPromptString = "Who is the payee. This needs to be the name of a person or company you have already setup. i.e. Martin Kearn or BT"};
+                        await dc.Prompt(Keys.AccountLabel,"Who is the payee?", promptOptions);
+                    }
+                },
+                async (dc, args, next) =>
+                {
+                    // Capture Payee to state
+                    if (!dc.ActiveDialog.State.ContainsKey(Keys.Payee))
+                    {
+                        var answer = (string)args["Value"];
+                        dc.ActiveDialog.State[Keys.Payee] = answer;
+                    }
+
+                    await next();
+                },
+                async (dc, args, next) =>
+                {
                     // Confirm the transfer.
                     var promptOptions = new PromptOptions(){RetryPromptString = "Should I make the transfer for you? Please enter `yes` or `no`."};
-                    var promptBody = $"Ok, I'll transfer `{dc.ActiveDialog.State[Keys.Money]}` from `{dc.ActiveDialog.State[Keys.AccountLabel]}` on `{dc.ActiveDialog.State[Keys.Date]}`, is this correct?";
+                    var promptBody = $"Ok, I'll transfer `{dc.ActiveDialog.State[Keys.Money]}` from `{dc.ActiveDialog.State[Keys.AccountLabel]}` on `{dc.ActiveDialog.State[Keys.Date]}` to `{dc.ActiveDialog.State[Keys.Payee]}`, is this correct?";
                     await dc.Prompt(Keys.Confirm, promptBody, promptOptions);
                 },
                 async (dc, args, next) =>

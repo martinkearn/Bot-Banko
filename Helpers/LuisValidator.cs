@@ -52,6 +52,16 @@ namespace Banko.Helpers
                 }
             }
 
+            // Check Payee
+            if (entities?.Payee?.Any() is true)
+            {
+                var payee = entities.Payee.FirstOrDefault(n => !string.IsNullOrWhiteSpace(n));
+                if (payee != null)
+                {
+                    result[Keys.Payee] = payee;
+                }
+            }
+
             return result;
         }
     }

@@ -34,3 +34,4 @@ The Make a Transfer feature can be invoked using natural language including some
 * __"Transfer from the joint account"__; the `Transfer` intent with the `AccountLabel` entity.
 * __"Transfer £20 from the joint account"__; the `Transfer` intent with the `AccountLabel` and `Money` entities.
 * __"Transfer £20 from the joint account on saturday"__; the `Transfer` intent with the `AccountLabel`, `Money` and `Date` entities.
+* __"Transfer £20 from the joint account to martin kearn on saturday"__; the `Transfer` intent with the `AccountLabel`, `Money`, `Date` and `Payee` entities.
