@@ -27,7 +27,7 @@ To make a transfer, the user must provide four different entities. These can be 
 * __AccountLabel__; a [simple Luis entity](https://docs.microsoft.com/en-gb/azure/cognitive-services/LUIS/luis-concept-entity-types) to represent the nick name for the account to transfer from i.e. 'Joint', 'Savings', 'Current' or 'Sole' 
 * __Money__; a [pre-built Luis Currency entity](https://docs.microsoft.com/en-gb/azure/cognitive-services/LUIS/luis-reference-prebuilt-currency) to represent the amount to be transferred
 * __Date__; a [pre-built Luis DatetimeV2 entity](https://docs.microsoft.com/en-gb/azure/cognitive-services/LUIS/luis-reference-prebuilt-datetimev2) to represent the date the transfer should take place
-* __Payee__; a [simple Luis entity](https://docs.microsoft.com/en-gb/azure/cognitive-services/LUIS/luis-concept-entity-types) to represent the label for the payment recipient. This will typically be a name or company name (The Luis model has very limited training here, so only the examples below are likely to work)
+* __Payee__; a [simple Luis entity](https://docs.microsoft.com/en-gb/azure/cognitive-services/LUIS/luis-concept-entity-types) to represent the label for the payment recipient. This will typically be a name or company name (The Luis model has very limited training here, so only 'Martin Kearn', 'Amy Griffiths', 'John Jones' and 'BT' are likely to work as a payee)
 
 The Make a Transfer feature can be invoked using natural language including some, all or none or the required entities. Here are some examples:
 * __"I want to make a transfer"__; the `Transfer` intent without any entities.
