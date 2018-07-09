@@ -73,14 +73,16 @@ namespace Banko.Bots
                     switch (luisResult.TopIntent().intent)
                     {
                         case BankoLuisModel.Intent.Balance:
+                            //Cant work out how to have multiple dialogs yet 
+                            //await dc.Begin(nameof(BalanceDialog), null);
                             var randomBalance = new Random().Next(00, 5000);
                             await context.SendActivity($"Your balance is {randomBalance}");
                             break;
                         case BankoLuisModel.Intent.Transfer:
                             var dialogArgs = new Dictionary<string, object>
-                        {
-                            { TransferDialog.Keys.LuisArgs, luisResult.Entities }
-                        };
+                            {
+                                { TransferDialog.Keys.LuisArgs, luisResult.Entities }
+                            };
                             await dc.Begin(nameof(TransferDialog), dialogArgs);
                             break;
                         case BankoLuisModel.Intent.None:

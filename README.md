@@ -11,6 +11,8 @@ This sample demonstrates:
 * __Entity completion__; using bot dialogs to complete entities that were missing from initial Luis utterance
 * __Basic bot dialogs with waterfall steps__
 
+This sample leans heavily on the [ContosoCafe-5-DialogsWithLUISEntities](https://github.com/Microsoft/BotFramework-Samples/tree/contosocafe-v4-dotnet/docs-samples/V4/dotnet/ContosoCafe/ContosoCafe-5-DialogsWithLUISEntities/ContosoCafe) example but simplifies it and focuses on just the Luis aspects.
+
 ## The Banko Bot Concept
 The bot is built around a very typical banking scenario which has two main capabilities:
 * Check balance
