@@ -16,22 +16,15 @@ using Banko.Constants;
 
 namespace Banko.Dialogs
 {
-    public class TransferDialog : DialogSet
+    public class TransferDialog : DialogContainer
     {
 
-        public static TransferDialog Instance { get; } = new Lazy<TransferDialog>(new TransferDialog()).Value;
+        public static TransferDialog Instance { get; } = new TransferDialog();
 
-        private TransferDialog()
+        private TransferDialog() : base(nameof(TransferDialog))
         {
-            // Add the prompts we'll be using in our dialog.
-            Add(Keys.AccountLabel, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
-            Add(Keys.Money, new Microsoft.Bot.Builder.Dialogs.NumberPrompt<int>(Culture.English, Validators.MoneyValidator));
-            Add(Keys.Date, new Microsoft.Bot.Builder.Dialogs.DateTimePrompt(Culture.English, Validators.DateTimeValidator));
-            Add(Keys.Payee, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
-            Add(Keys.Confirm, new Microsoft.Bot.Builder.Dialogs.ConfirmPrompt(Culture.English));
-
             // Define and add the waterfall steps for our dialog.
-            Add(nameof(TransferDialog), new WaterfallStep[]
+            this.Dialogs.Add(nameof(TransferDialog), new WaterfallStep[]
             {
                 // Begin a transfer.
                 async (dc, args, next) =>
@@ -195,10 +188,19 @@ namespace Banko.Dialogs
                 {
                     // Prompt the user to do something else
                     await dc.Context.SendActivity("OK, we're done here. What is next?");
-
-                    // No await Next(); because this is the end of the dialog so we don't want to wait for anything
+                },
+                async (dc, args, next) =>
+                {
+                    await dc.End();
                 }
             });
+
+            // Add the prompts and child dialogs
+            this.Dialogs.Add(Keys.AccountLabel, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
+            this.Dialogs.Add(Keys.Money, new Microsoft.Bot.Builder.Dialogs.NumberPrompt<int>(Culture.English, Validators.MoneyValidator));
+            this.Dialogs.Add(Keys.Date, new Microsoft.Bot.Builder.Dialogs.DateTimePrompt(Culture.English, Validators.DateTimeValidator));
+            this.Dialogs.Add(Keys.Payee, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
+            this.Dialogs.Add(Keys.Confirm, new Microsoft.Bot.Builder.Dialogs.ConfirmPrompt(Culture.English));
         }
 
 

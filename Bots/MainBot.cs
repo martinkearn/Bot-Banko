@@ -22,17 +22,10 @@ namespace Banko.Bots
 {
     public class MainBot : IBot
     {
-        /// <summary>
-        /// Singleton reference to the LUIS app and model.
-        /// </summary>
         private LuisRecognizer LuisRecognizer { get; } = null;
 
         private DialogSet _dialogs { get; } = null;
 
-        /// <summary>
-        /// A bot constructor that takes a configuration object.
-        /// </summary>
-        /// <param name="configuration">A configuration object containing information from our appsettings.json file.</param>
         public MainBot(IConfiguration configuration)
         {            
             // Create DialogSet
@@ -94,13 +87,9 @@ namespace Banko.Bots
                                 await dc.Begin(nameof(BalanceDialog));
                                 break;
                             case BankoLuisModel.Intent.Transfer:
-                                var dialogArgs = new Dictionary<string, object>
-                                {
-                                    { Keys.LuisArgs, luisResult.Entities }
-                                };
-                                //await dc.Begin(nameof(TransferDialog), dialogArgs);
-                                await dc.Context.SendActivity($"Transfer");
-                                await next();
+                                var dialogArgs = new Dictionary<string, object>();
+                                dialogArgs.Add(Keys.LuisArgs, luisResult.Entities);
+                                await dc.Begin(nameof(TransferDialog), dialogArgs);
                                 break;
                             case BankoLuisModel.Intent.None:
                             default:
@@ -118,6 +107,7 @@ namespace Banko.Bots
 
             // Add our child dialogs.
             dialogs.Add(nameof(BalanceDialog), BalanceDialog.Instance);
+            dialogs.Add(nameof(TransferDialog), TransferDialog.Instance);
 
             return dialogs;
         }

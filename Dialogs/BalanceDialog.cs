@@ -25,6 +25,11 @@ namespace Banko.Dialogs
                 },
                 async (dc, args, next) =>
                 {
+                    // Prompt the user to do something else
+                    await dc.Context.SendActivity("OK, we're done here. What is next?");
+                },
+                async (dc, args, next) =>
+                {
                     await dc.End();
                 }
             });
