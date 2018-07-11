@@ -1,13 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Banko.Constants;
-using Banko.Dialogs;
+using Banko.DialogContainers;
 using Banko.Models;
 using Microsoft.Bot;
 using Microsoft.Bot.Builder;
@@ -17,6 +12,10 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Cognitive.LUIS;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Banko.Bots
 {
@@ -84,12 +83,12 @@ namespace Banko.Bots
                         switch (luisResult.TopIntent().intent)
                         {
                             case BankoLuisModel.Intent.Balance:
-                                await dc.Begin(nameof(BalanceDialog));
+                                await dc.Begin(nameof(BalanceDialogContainer));
                                 break;
                             case BankoLuisModel.Intent.Transfer:
                                 var dialogArgs = new Dictionary<string, object>();
                                 dialogArgs.Add(Keys.LuisArgs, luisResult.Entities);
-                                await dc.Begin(nameof(TransferDialog), dialogArgs);
+                                await dc.Begin(nameof(TransferDialogContainer), dialogArgs);
                                 break;
                             case BankoLuisModel.Intent.None:
                             default:
@@ -106,8 +105,8 @@ namespace Banko.Bots
             });
 
             // Add our child dialogs.
-            dialogs.Add(nameof(BalanceDialog), BalanceDialog.Instance);
-            dialogs.Add(nameof(TransferDialog), TransferDialog.Instance);
+            dialogs.Add(nameof(BalanceDialogContainer), BalanceDialogContainer.Instance);
+            dialogs.Add(nameof(TransferDialogContainer), TransferDialogContainer.Instance);
 
             return dialogs;
         }

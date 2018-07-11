@@ -1,19 +1,16 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Banko.Dialogs
+namespace Banko.DialogContainers
 {
-    public class BalanceDialog : DialogContainer
+    public class BalanceDialogContainer : DialogContainer
     {
-        public static BalanceDialog Instance { get; } = new BalanceDialog();
+        public static BalanceDialogContainer Instance { get; } = new BalanceDialogContainer();
 
-        private BalanceDialog() : base(nameof(BalanceDialog))
+        private BalanceDialogContainer() : base(nameof(BalanceDialogContainer))
         {
             // Define and add the waterfall steps for our dialog.
-            this.Dialogs.Add(nameof(BalanceDialog), new WaterfallStep[]
+            this.Dialogs.Add(nameof(BalanceDialogContainer), new WaterfallStep[]
             {
                 // Begin a check balance.
                 async (dc, args, next) =>

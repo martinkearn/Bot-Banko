@@ -1,30 +1,24 @@
-﻿using Banko.Models;
+﻿using Banko.Constants;
 using Banko.Helpers;
-using Microsoft.Bot.Builder;
+using Banko.Models;
 using Microsoft.Bot.Builder.Core.Extensions;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Prompts;
-using Microsoft.Bot.Builder.Prompts.Choices;
 using Microsoft.Bot.Schema;
 using Microsoft.Recognizers.Text;
-using Microsoft.Recognizers.Text.DataTypes.TimexExpression;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Banko.Constants;
 
-namespace Banko.Dialogs
+namespace Banko.DialogContainers
 {
-    public class TransferDialog : DialogContainer
+    public class TransferDialogContainer : DialogContainer
     {
 
-        public static TransferDialog Instance { get; } = new TransferDialog();
+        public static TransferDialogContainer Instance { get; } = new TransferDialogContainer();
 
-        private TransferDialog() : base(nameof(TransferDialog))
+        private TransferDialogContainer() : base(nameof(TransferDialogContainer))
         {
             // Define and add the waterfall steps for our dialog.
-            this.Dialogs.Add(nameof(TransferDialog), new WaterfallStep[]
+            this.Dialogs.Add(nameof(TransferDialogContainer), new WaterfallStep[]
             {
                 // Begin a transfer.
                 async (dc, args, next) =>
