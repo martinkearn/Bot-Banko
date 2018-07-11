@@ -3,13 +3,8 @@
 namespace Banko.Models
 {
     /// <summary>
-    /// Class for storing conversation state.
+    /// Conversation state information.
+    /// We are also using this directly for dialog state, which needs an <see cref="IDictionary{string, object}"/> object.
     /// </summary>
-    public class ConversationData
-    {
-        /// <summary>
-        /// Property for storing dialog state for the book a table dialog.
-        /// </summary>
-        public Dictionary<string, object> DialogState { get; set; } = new Dictionary<string, object>();
-    }
+    public class ConversationData : Dictionary<string, object> { }
 }
