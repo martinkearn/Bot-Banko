@@ -12,52 +12,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Banko.Constants;
 
 namespace Banko.Dialogs
 {
-    /// <summary>
-    /// Defines the dialog for doing a transfer
-    /// </summary>
-    public class TransferDialog : DialogSet
+    public class TransferDialog : DialogContainer
     {
-        /// <summary>
-        /// Defines a singleton instance of the dialog.
-        /// </summary>
-        public static TransferDialog Instance { get; } = new Lazy<TransferDialog>(new TransferDialog()).Value;
 
-        /// <summary>
-        /// The names of the inputs and prompts in this dialog.
-        /// </summary>
-        /// <remarks>We'll store the information gathered using these same names.</remarks>
-        public struct Keys
+        public static TransferDialog Instance { get; } = new TransferDialog();
+
+        private TransferDialog() : base(nameof(TransferDialog))
         {
-            /// <summary>
-            ///  Key to use for LUIS entities as input.
-            /// </summary>
-            public const string LuisArgs = "LuisEntities";
-
-            public const string AccountLabel = "AccountLabel";
-            public const string Money = "money";
-            public const string Payee = "Payee";
-            public const string Date = "datetimeV2";
-            public const string Confirm = "confirmation";
-        }
-
-
-        /// <summary>
-        /// Creates a new dialog instance.
-        /// </summary>
-        private TransferDialog()
-        {
-            // Add the prompts we'll be using in our dialog.
-            Add(Keys.AccountLabel, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
-            Add(Keys.Money, new Microsoft.Bot.Builder.Dialogs.NumberPrompt<int>(Culture.English, Validators.MoneyValidator));
-            Add(Keys.Date, new Microsoft.Bot.Builder.Dialogs.DateTimePrompt(Culture.English, Validators.DateTimeValidator));
-            Add(Keys.Payee, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
-            Add(Keys.Confirm, new Microsoft.Bot.Builder.Dialogs.ConfirmPrompt(Culture.English));
-
             // Define and add the waterfall steps for our dialog.
-            Add(nameof(TransferDialog), new WaterfallStep[]
+            this.Dialogs.Add(nameof(TransferDialog), new WaterfallStep[]
             {
                 // Begin a transfer.
                 async (dc, args, next) =>
@@ -221,10 +188,19 @@ namespace Banko.Dialogs
                 {
                     // Prompt the user to do something else
                     await dc.Context.SendActivity("OK, we're done here. What is next?");
-
-                    // No await Next(); because this is the end of the dialog so we don't want to wait for anything
+                },
+                async (dc, args, next) =>
+                {
+                    await dc.End();
                 }
             });
+
+            // Add the prompts and child dialogs
+            this.Dialogs.Add(Keys.AccountLabel, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
+            this.Dialogs.Add(Keys.Money, new Microsoft.Bot.Builder.Dialogs.NumberPrompt<int>(Culture.English, Validators.MoneyValidator));
+            this.Dialogs.Add(Keys.Date, new Microsoft.Bot.Builder.Dialogs.DateTimePrompt(Culture.English, Validators.DateTimeValidator));
+            this.Dialogs.Add(Keys.Payee, new Microsoft.Bot.Builder.Dialogs.TextPrompt());
+            this.Dialogs.Add(Keys.Confirm, new Microsoft.Bot.Builder.Dialogs.ConfirmPrompt(Culture.English));
         }
 
 

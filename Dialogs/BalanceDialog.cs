@@ -6,26 +6,20 @@ using System.Threading.Tasks;
 
 namespace Banko.Dialogs
 {
-    public class BalanceDialog : DialogSet
+    public class BalanceDialog : DialogContainer
     {
-        /// <summary>
-        /// Defines a singleton instance of the dialog.
-        /// </summary>
-        public static BalanceDialog Instance { get; } = new Lazy<BalanceDialog>(new BalanceDialog()).Value;
+        public static BalanceDialog Instance { get; } = new BalanceDialog();
 
-        /// <summary>
-        /// Creates a new dialog instance.
-        /// </summary>
-        private BalanceDialog()
+        private BalanceDialog() : base(nameof(BalanceDialog))
         {
             // Define and add the waterfall steps for our dialog.
-            Add(nameof(BalanceDialog), new WaterfallStep[]
+            this.Dialogs.Add(nameof(BalanceDialog), new WaterfallStep[]
             {
                 // Begin a check balance.
                 async (dc, args, next) =>
                 {
                     var randomBalance = new Random().Next(00, 5000);
-                    await dc.Context.SendActivity($"Your balance is {randomBalance}");
+                    await dc.Context.SendActivity($"Your balance is £{Convert.ToDecimal(randomBalance)}");
 
                     await next();
                 },
@@ -33,8 +27,10 @@ namespace Banko.Dialogs
                 {
                     // Prompt the user to do something else
                     await dc.Context.SendActivity("OK, we're done here. What is next?");
-
-                    // No await Next(); because this is the end of the dialog so we don't want to wait for anything
+                },
+                async (dc, args, next) =>
+                {
+                    await dc.End();
                 }
             });
         }
