@@ -19,15 +19,12 @@ namespace Banko.Dialogs
                 async (dc, args, next) =>
                 {
                     var randomBalance = new Random().Next(00, 5000);
-                    await dc.Context.SendActivity($"Your balance is {randomBalance}");
+                    await dc.Context.SendActivity($"Your balance is £{Convert.ToDecimal(randomBalance)}");
 
                     await next();
                 },
                 async (dc, args, next) =>
                 {
-                    // Prompt the user to do something else
-                    await dc.Context.SendActivity("OK, we're done here. What is next?");
-
                     await dc.End();
                 }
             });

@@ -12,41 +12,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Banko.Constants;
 
 namespace Banko.Dialogs
 {
-    /// <summary>
-    /// Defines the dialog for doing a transfer
-    /// </summary>
     public class TransferDialog : DialogSet
     {
-        /// <summary>
-        /// Defines a singleton instance of the dialog.
-        /// </summary>
+
         public static TransferDialog Instance { get; } = new Lazy<TransferDialog>(new TransferDialog()).Value;
 
-        /// <summary>
-        /// The names of the inputs and prompts in this dialog.
-        /// </summary>
-        /// <remarks>We'll store the information gathered using these same names.</remarks>
-        public struct Keys
-        {
-            /// <summary>
-            ///  Key to use for LUIS entities as input.
-            /// </summary>
-            public const string LuisArgs = "LuisEntities";
-
-            public const string AccountLabel = "AccountLabel";
-            public const string Money = "money";
-            public const string Payee = "Payee";
-            public const string Date = "datetimeV2";
-            public const string Confirm = "confirmation";
-        }
-
-
-        /// <summary>
-        /// Creates a new dialog instance.
-        /// </summary>
         private TransferDialog()
         {
             // Add the prompts we'll be using in our dialog.

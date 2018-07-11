@@ -66,7 +66,7 @@ namespace Banko
                 // IStorage dataStore = new Microsoft.Bot.Builder.Azure.AzureTableStorage("AzureTablesConnectionString", "TableName");
                 // IStorage dataStore = new Microsoft.Bot.Builder.Azure.AzureBlobStorage("AzureBlobConnectionString", "containerName");
 
-                options.Middleware.Add(new ConversationState<ConversationData>(dataStore));
+                options.Middleware.Add(new ConversationState<ConversationInfo>(dataStore));
             });
         }
 

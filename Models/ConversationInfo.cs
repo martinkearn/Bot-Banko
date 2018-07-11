@@ -6,5 +6,5 @@ namespace Banko.Models
     /// Conversation state information.
     /// We are also using this directly for dialog state, which needs an <see cref="IDictionary{string, object}"/> object.
     /// </summary>
-    public class ConversationData : Dictionary<string, object> { }
+    public class ConversationInfo : Dictionary<string, object> { }
 }
