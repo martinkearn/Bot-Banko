@@ -4,17 +4,17 @@
 const { BotStateSet, BotFrameworkAdapter, MemoryStorage, ConversationState, UserState } = require('botbuilder');
 const restify = require('restify');
 const { LuisRecognizer } = require('botbuilder-ai');
-require('dotenv').config();
+//require('dotenv').config();
 
 const model = new LuisRecognizer({
     // This appID is for a public app that's made available for demo purposes
     // You can use it by providing your LUIS subscription key
-     appId: 'eb0bf5e0-b468-421b-9375-fdfb644c512e',
+     appId: process.env.LuisModel,
     // replace subscriptionKey with your Authoring Key
     // your key is at https://www.luis.ai under User settings > Authoring Key 
-    subscriptionKey: '<your subscription key>',
+    subscriptionKey: process.env.LuisSubscriptionKey,
     // The serviceEndpoint URL begins with "https://<region>.api.cognitive.microsoft.com", where region is the region associated with the key you are using. Some examples of regions are `westus`, `westcentralus`, `eastus2`, and `southeastasia`.
-    serviceEndpoint: 'https://westus.api.cognitive.microsoft.com'
+    serviceEndpoint: 'https://westeurope.api.cognitive.microsoft.com'
 });
 
 // Create server
@@ -42,8 +42,8 @@ server.post('/api/messages', (req, res) => {
         if (context.activity.type === 'message') {
             const state = convoState.get(context);
             const count = state.count === undefined ? state.count = 0 : ++state.count;
-            let testSecret = process.env("TESTSECRET");
-            return context.sendActivity(`${count}: You said "${context.activity.text}", also the secret is ${testSecret}`);
+            //let testSecret = process.env("TESTSECRET");
+            return context.sendActivity(`${count}: You said "${context.activity.text}"`);
         } else {
             return context.sendActivity(`[${context.activity.type} event detected]`);
         }
