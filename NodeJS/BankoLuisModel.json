@@ -1,0 +1,243 @@
+{
+  "luis_schema_version": "3.0.0",
+  "versionId": "0.1",
+  "name": "Banko",
+  "desc": "A sample app for conversation-as-a-platform in the banking sector",
+  "culture": "en-us",
+  "intents": [
+    {
+      "name": "Balance"
+    },
+    {
+      "name": "None"
+    },
+    {
+      "name": "Transfer"
+    }
+  ],
+  "entities": [
+    {
+      "name": "AccountLabel",
+      "roles": []
+    },
+    {
+      "name": "Payee",
+      "roles": []
+    }
+  ],
+  "composites": [],
+  "closedLists": [],
+  "patternAnyEntities": [],
+  "regex_entities": [],
+  "prebuiltEntities": [
+    {
+      "name": "datetimeV2",
+      "roles": []
+    },
+    {
+      "name": "money",
+      "roles": []
+    }
+  ],
+  "model_features": [],
+  "regex_features": [],
+  "patterns": [],
+  "utterances": [
+    {
+      "text": "can i move £2.50 from savings to david kearn tomorrow",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountLabel",
+          "startPos": 22,
+          "endPos": 28
+        },
+        {
+          "entity": "Payee",
+          "startPos": 33,
+          "endPos": 43
+        }
+      ]
+    },
+    {
+      "text": "can i move £2.50 from the sole account to john jones",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountLabel",
+          "startPos": 26,
+          "endPos": 29
+        },
+        {
+          "entity": "Payee",
+          "startPos": 42,
+          "endPos": 51
+        }
+      ]
+    },
+    {
+      "text": "how much money do i have",
+      "intent": "Balance",
+      "entities": []
+    },
+    {
+      "text": "i want to move £40.00",
+      "intent": "Transfer",
+      "entities": []
+    },
+    {
+      "text": "i want to move money",
+      "intent": "Transfer",
+      "entities": []
+    },
+    {
+      "text": "i want to move some money",
+      "intent": "Transfer",
+      "entities": []
+    },
+    {
+      "text": "i want to transfer £3.50 from joint account to amy griffiths",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountLabel",
+          "startPos": 30,
+          "endPos": 34
+        },
+        {
+          "entity": "Payee",
+          "startPos": 47,
+          "endPos": 59
+        }
+      ]
+    },
+    {
+      "text": "i want to transfer £35 next monday",
+      "intent": "Transfer",
+      "entities": []
+    },
+    {
+      "text": "i'd like a balance on account 1234",
+      "intent": "Balance",
+      "entities": []
+    },
+    {
+      "text": "list my accounts",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "please can i have a balance",
+      "intent": "Balance",
+      "entities": []
+    },
+    {
+      "text": "please list my accounts",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "please list my recipients",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "please move £3.50 to my savings account",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountLabel",
+          "startPos": 24,
+          "endPos": 30
+        }
+      ]
+    },
+    {
+      "text": "please transfer £3 from current account to jamie dalton tomorrow",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountLabel",
+          "startPos": 24,
+          "endPos": 30
+        },
+        {
+          "entity": "Payee",
+          "startPos": 43,
+          "endPos": 54
+        }
+      ]
+    },
+    {
+      "text": "please transfer £3 from joint account to martin kearn",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountLabel",
+          "startPos": 24,
+          "endPos": 28
+        },
+        {
+          "entity": "Payee",
+          "startPos": 41,
+          "endPos": 52
+        }
+      ]
+    },
+    {
+      "text": "what are my account numbers",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "what are my recent transactions",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "what are my recent transactions on account ending 8994",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "what are my saved recipients",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "what is my balance",
+      "intent": "Balance",
+      "entities": []
+    },
+    {
+      "text": "what is my current balance",
+      "intent": "Balance",
+      "entities": []
+    },
+    {
+      "text": "what is teh balance of account ending 1234",
+      "intent": "Balance",
+      "entities": []
+    },
+    {
+      "text": "what is the balance of account 1234",
+      "intent": "Balance",
+      "entities": []
+    },
+    {
+      "text": "what is the balance of my account",
+      "intent": "Balance",
+      "entities": []
+    },
+    {
+      "text": "what went out of my account yesterday",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "whats the balance on account ending 8994",
+      "intent": "Balance",
+      "entities": []
+    }
+  ]
+}

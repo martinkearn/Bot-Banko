@@ -4,12 +4,17 @@
   "description": "Default Echo bot for node",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "author": "Microsoft",
   "license": "MIT",
   "dependencies": {
     "botbuilder": "^4.0.0-preview1.2",
+    "botbuilder-ai": "^4.0.0-preview1.2",
+    "botbuilder-core": "^4.0.0-preview1.2",
+    "botbuilder-dialogs": "^4.0.0-preview1.2",
+    "dotenv": "^6.0.0",
     "fs": "0.0.1-security",
     "path": "^0.12.7",
     "request": "^2.88.0",
