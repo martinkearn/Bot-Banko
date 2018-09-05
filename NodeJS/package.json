@@ -2,14 +2,18 @@
   "name": "nodev4echobot",
   "version": "1.0.0",
   "description": "Default Echo bot for node",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Microsoft",
   "license": "MIT",
   "dependencies": {
-    "botbuilder": "^4.0.0-preview1.0",
-    "restify": "^7.1.1"
+    "botbuilder": "^4.0.0-preview1.2",
+    "fs": "0.0.1-security",
+    "path": "^0.12.7",
+    "request": "^2.88.0",
+    "restify": "^7.2.1",
+    "zip-folder": "^1.0.0"
   }
 }
