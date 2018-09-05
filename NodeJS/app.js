@@ -4,16 +4,11 @@
 const { BotStateSet, BotFrameworkAdapter, MemoryStorage, ConversationState, UserState } = require('botbuilder');
 const restify = require('restify');
 const { LuisRecognizer } = require('botbuilder-ai');
-//require('dotenv').config();
+require('dotenv').config();
 
-const model = new LuisRecognizer({
-    // This appID is for a public app that's made available for demo purposes
-    // You can use it by providing your LUIS subscription key
-     appId: process.env.LuisModel,
-    // replace subscriptionKey with your Authoring Key
-    // your key is at https://www.luis.ai under User settings > Authoring Key 
-    subscriptionKey: process.env.LuisSubscriptionKey,
-    // The serviceEndpoint URL begins with "https://<region>.api.cognitive.microsoft.com", where region is the region associated with the key you are using. Some examples of regions are `westus`, `westcentralus`, `eastus2`, and `southeastasia`.
+const luisRecognizer = new LuisRecognizer({
+    appId: process.env("LuisModel"),
+    subscriptionKey: process.env("LuisSubscriptionKey"),
     serviceEndpoint: 'https://westeurope.api.cognitive.microsoft.com'
 });
 
@@ -35,17 +30,35 @@ const convoState = new ConversationState(storage);
 const userState = new UserState(storage);
 adapter.use(new BotStateSet(convoState, userState));
 
+// Add the recognizer to your bot
+adapter.use(luisRecognizer);
+
 // Listen for incoming requests 
 server.post('/api/messages', (req, res) => {
-    // Route received request to adapter for processing
-    adapter.processActivity(req, res, (context) => {
+    adapter.processActivity(req, res, async(context) => {
         if (context.activity.type === 'message') {
             const state = convoState.get(context);
-            const count = state.count === undefined ? state.count = 0 : ++state.count;
-            //let testSecret = process.env("TESTSECRET");
-            return context.sendActivity(`${count}: You said "${context.activity.text}"`);
+
+            const luisResults = luisRecognizer.get(context);
+
+            // Extract the top intent from LUIS and use it to select which dialog to start
+            const topIntent = LuisRecognizer.topIntent(luisResults, "NotFound");
+            switch (topIntent) {
+                case 'Balance':                    
+                    await context.sendActivity(`You reached the Balance intent.`);
+                    break;
+                case 'Transfer':                    
+                    await context.sendActivity(`You reached the Transfer intent.`);
+                    break;
+                case 'None':
+                    await context.sendActivity(`You reached the None intent.`);
+                    break;
+                default:
+                    break;
+            }
+
         } else {
-            return context.sendActivity(`[${context.activity.type} event detected]`);
+            await context.sendActivity(`[${context.activity.type} event detected]`);
         }
     });
 });
