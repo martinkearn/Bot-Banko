@@ -1,13 +1,19 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
-const { BotStateSet, BotFrameworkAdapter, MemoryStorage, ConversationState, UserState } = require('botbuilder');
+const { BotStateSet, BotFrameworkAdapter, MemoryStorage, TurnContext, ConversationState, UserState } = require('botbuilder');
+const {
+    DialogSet,
+    TextPrompt,
+    ChoicePrompt,
+    ConfirmPrompt,
+    DatetimePrompt,
+    FoundChoice,
+    FoundDatetime,
+    ListStyle
+} = require('botbuilder-dialogs');
 const restify = require('restify');
 const { LuisRecognizer } = require('botbuilder-ai');
-const { DialogSet } = require('botbuilder-dialogs');
 require('dotenv').config();
 
-const luisRecognizer = new LuisRecognizer({
+const model = new LuisRecognizer({
     appId: process.env.LuisModel,
     subscriptionKey: process.env.LuisSubscriptionKey,
     serviceEndpoint: 'https://westeurope.api.cognitive.microsoft.com'
@@ -26,54 +32,121 @@ const adapter = new BotFrameworkAdapter({
 });
 
 // Add state middleware
-const conversationState = new ConversationState(new MemoryStorage());
-adapter.use(conversationState);
+const storage = new MemoryStorage();
+const convoState = new ConversationState(storage);
+const userState = new UserState(storage);
+adapter.use(new BotStateSet(convoState, userState));
 
-// Add the recognizer to your bot
-adapter.use(luisRecognizer);
+// Listen for incoming requests
+server.post('/api/messages', (req, res) => {
+    // Route received request to adapter for processing
+    adapter.processActivity(req, res, async context => {
+        if (context.activity.type === 'message') {
+            const state = convoState.get(context);
+            const utterance = (context.activity.text || '').trim().toLowerCase();
+
+            // Create dialog context
+            const dc = dialogs.createContext(context, state);
+
+            // Call LUIS model
+            await model
+                .recognize(context)
+                .then(async res => {
+                    // Resolve intents returned from LUIS
+                    let topIntent = LuisRecognizer.topIntent(res);
+                    state.Intent = topIntent;
+
+                    // Start Transfer dialog
+                    if (topIntent === 'Transfer') {
+                        // Resolve entities returned from LUIS, and save to state
+                        let accountLabel = res.entities['AccountLabel'];
+                        state.AccountLabel = (accountLabel) ? accountLabel : null;
+
+                        return dc.begin('TransferDialog');
+
+                        // Start Balance
+                    } else if (topIntent === 'Balance') {
+                        return dc.begin('BalanceDialog');
+
+                        // Continue current dialog
+                    } else {
+                        return dc.continue().then(async res => {
+                            // Return default message if nothing replied.
+                            if (!context.responded) {
+                                await context.sendActivity(`I dont know what you want to do. Type 'make a transfer' or 'get a balance'.`);
+                            }
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
+    });
+});
+
+// // Helper function for finding a specified entity. entityResults are the results from LuisRecognizer.get(context)
+// function findEntities(entityName, entityResults) {
+//     let entities = []
+//     if (entityName in entityResults) {
+//         entityResults[entityName].forEach(entity => {
+//             entities.push(entity);
+//         });
+//     }
+//     return entities.length > 0 ? entities : undefined;
+// }
 
 // register some dialogs for usage with the intents detected by the LUIS app
 const dialogs = new DialogSet();
 
+dialogs.add('textPrompt', new TextPrompt());
+
 dialogs.add('BalanceDialog', [
-    async (dialogContext) => {
-        await dialogContext.context.sendActivity(`Your balance is £20.`);
-        await dialogContext.end();
+    async function(dc){
+        let balance = Math.floor(Math.random() * Math.floor(100));
+        await dc.context.sendActivity(`Your balance is £${balance}.`);
+        await dc.continue();
+    },
+    async function(dc){
+        await dc.context.sendActivity(`OK, we're done here. What is next?`);
+        await dc.continue();
+    },
+    async function(dc){
+        await dc.end();
     }
 ]);
 
 dialogs.add('TransferDialog', [
-    async (dialogContext) => {
-        await dialogContext.context.sendActivity(`Transfer.`);
-        await dialogContext.end();
+    async function(dc) {
+        const state = convoState.get(dc.context);
+        if (state.AccountLabel) {
+            await dc.continue();
+        } else {
+            await dc.prompt('textPrompt', `Which account do you want to transfer from? For example Joint, Current, Savings etc`);
+        }
+    },
+    async function(dc, accountLabel) {
+        const state = convoState.get(dc.context);
+        // Save accountLabel
+        if (!state.AccountLabel) {
+            state.AccountLabel = accountLabel;
+        }
+        
+        //continue
+        await dc.continue();
+    },
+    async function(dc) {
+        const state = convoState.get(dc.context);
+        await dc.context.sendActivity(`AccountLabel: ${state.AccountLabel}`);
+
+        //continue
+        await dc.continue();
+    },    
+    async function(dc){
+        await dc.context.sendActivity(`OK, we're done here. What is next?`);
+        await dc.continue();
+    },
+    async function(dc){
+        await dc.end();
     }
 ]);
-
-// Listen for incoming requests 
-server.post('/api/messages', (req, res) => {
-    adapter.processActivity(req, res, async(context) => {
-        if (context.activity.type === 'message') {
-            const state = conversationState.get(context);
-            const dc = dialogs.createContext(context, state);
-
-            const luisResults = luisRecognizer.get(context);
-
-            // Extract the top intent from LUIS and use it to select which dialog to start
-            const topIntent = LuisRecognizer.topIntent(luisResults, "NotFound");
-            switch (topIntent) {
-                case 'Balance':                    
-                    await dc.begin("BalanceDialog", luisResults);
-                    break;
-                case 'Transfer':                    
-                    await dc.begin("TransferDialog", luisResults);
-                    break;
-                case 'None':
-                    await context.sendActivity(`I dont know what you want to do. Type "make a transfer" or "get a balance".`);
-                    break;
-                default:
-                    break;
-            }
-
-        }
-    });
-});
