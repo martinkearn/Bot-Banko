@@ -15,4 +15,8 @@
     <PackageReference Include="Microsoft.Recognizers.Text.DataTypes.TimexExpression" Version="1.0.8.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
 </Project>
