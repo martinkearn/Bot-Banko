@@ -1,50 +1,52 @@
 {
-  "name": "BankoBot",
-  "padlock": "TM3TGjyOtzHGmL9tCTtWvA==!GNgyGdorLwNbTBFUlYnXNtAPHUk6UnhbRaNw2AR0jL6jZuR/mRJ1osYFIA5SE/5s",
-  "version": "2.0",
-  "services": [
-    {
-      "tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47",
-      "subscriptionId": "1fcbb1ab-1178-46fc-8c5d-f0e20b65610d",
-      "resourceGroup": "Banko",
-      "serviceName": "BankoBot",
-      "type": "abs",
-      "name": "BankoBot",
-      "id": "1"
-    },
-    {
-      "connectionString": "FU6g8wU916w9Ll/JO9e+4A==!GMbNVtxVkTfj/i0qb7Pa200lQHZb0aEy9GtxKPzKHLeQgi+51P63gNJYa9rs/CY5tHDNElJezE+Xa/+o4by4NZtQWhyj2UsoQgiSJCSWs7saPdJ0L4ajrIvmnejm/9N6JnR03w80QQogJJBwz7QCZeJanl4lfKmpLWEZ5c0aFGOIunL4zrxpzxjqTIcHy9SKd+DaCKqZ/DwvCIYk0FVyGw==",
-      "tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47",
-      "subscriptionId": "1fcbb1ab-1178-46fc-8c5d-f0e20b65610d",
-      "resourceGroup": "Banko",
-      "serviceName": "bankobotba63",
-      "type": "blob",
-      "id": "2"
-    },
-    {
-      "appId": "",
-      "appPassword": "",
-      "endpoint": "http://localhost:3978/api/messages",
-      "type": "endpoint",
-      "name": "development",
-      "id": "3"
-    },
-    {
-      "appId": "8329a7f8-8e49-473d-95d4-19ad6d695713",
-      "appPassword": "NAW7pghdlxYU1Z/XK3PINA==!ZeoSpIlZZzXMMSAqx+ZHVTLUfLplkDyHEuMWejF9h1M=",
-      "endpoint": "https://bankobot.azurewebsites.net/api/messages",
-      "type": "endpoint",
-      "name": "production",
-      "id": "4"
-    },
-    {
-      "appId": "269fa58f-ecf8-4b41-ab39-6599ea75da4e",
-      "authoringKey": "m/mKkpnOza6VisDkiZcrZw==!81S1IrNJEwr7uIp6DDZDeIZwanFwoV4gsdUgAkZCKfaUk8DoMgP03wBFqBvSaZAp",
-      "version": "0.1",
-      "region": "westeurope",
-      "type": "luis",
-      "name": "BasicBotLuisApplication",
-      "id": "5"
-    }
-  ]
+    "name": "BankoBot",
+    "description": "",
+    "services": [
+        {
+            "type": "abs",
+            "tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+            "subscriptionId": "1fcbb1ab-1178-46fc-8c5d-f0e20b65610d",
+            "resourceGroup": "Banko",
+            "serviceName": "BankoBot",
+            "name": "BankoBot",
+            "id": "1",
+            "appId": "8329a7f8-8e49-473d-95d4-19ad6d695713"
+        },
+        {
+            "type": "blob",
+            "connectionString": "nF1XpGn1eNWvQl3ldyw5pg==!ePzktwc6kwDvv7nhQZSrqfkDC0lV+AppY2ODMobc7T/DU4OvlXv/THnaoxXVyLlFph8wHZ4Mi0J6wsyS5Jj20Vfg2F75F+67hU4tLbyPQ3V1kqfdLHxhi6j1IVkg9g3NfGorRsS/HOkGncvR4gcK1FT2jw1mrdSu7oht6Fj36eTwGkrFeI8vxJXvPfUfV1slB2s9yTVrxMUg0UEgD6noTw==",
+            "tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+            "subscriptionId": "1fcbb1ab-1178-46fc-8c5d-f0e20b65610d",
+            "resourceGroup": "Banko",
+            "serviceName": "bankobotba63",
+            "id": "2"
+        },
+        {
+            "type": "endpoint",
+            "appId": "",
+            "appPassword": "",
+            "endpoint": "http://localhost:3978/api/messages",
+            "name": "development",
+            "id": "3"
+        },
+        {
+            "type": "endpoint",
+            "appId": "8329a7f8-8e49-473d-95d4-19ad6d695713",
+            "appPassword": "X880UIX8EdvZ88Zw4/sbxQ==!EEw398IdkmhLl/drJnsCJ66PC7hCG2y1wfNCnglBpVM=",
+            "endpoint": "https://bankobot.azurewebsites.net/api/messages",
+            "name": "production",
+            "id": "4"
+        },
+        {
+            "type": "luis",
+            "name": "Banko",
+            "appId": "82513ca1-70a6-4336-b297-fdf8059ea589",
+            "version": "v0.1",
+            "authoringKey": "px7C5VvBysmy3oUrA6+gtA==!44x2+6FsArWOjYgX2diNfRq4IlFUr8XZF1esEB2q/nMKOPHJQ8H57nWOhQgjDy2b",
+            "region": "westeurope",
+            "id": "222"
+        }
+    ],
+    "padlock": "TM3TGjyOtzHGmL9tCTtWvA==!GNgyGdorLwNbTBFUlYnXNtAPHUk6UnhbRaNw2AR0jL6jZuR/mRJ1osYFIA5SE/5s",
+    "version": "2.0"
 }

@@ -32,7 +32,7 @@ namespace Microsoft.BotBuilderSamples
         /// Key in the bot config (.bot file) for the LUIS instance.
         /// In the .bot file, multiple instances of LUIS can be configured.
         /// </summary>
-        public static readonly string LuisConfiguration = "BasicBotLuisApplication";
+        public static readonly string LuisConfiguration = "Banko";
 
         private readonly IStatePropertyAccessor<GreetingState> _greetingStateAccessor;
         private readonly IStatePropertyAccessor<DialogState> _dialogStateAccessor;
@@ -124,7 +124,7 @@ namespace Microsoft.BotBuilderSamples
                                 default:
                                     // Help or no intent identified, either way, let's provide some help.
                                     // to the user
-                                    await dc.Context.SendActivityAsync("I didn't understand what you just said to me.");
+                                    await dc.Context.SendActivityAsync($"I didn't understand what you just said to me. Intent was {topIntent}");
                                     break;
                             }
 

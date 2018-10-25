@@ -40,6 +40,11 @@ namespace Microsoft.BotBuilderSamples
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>(false);
+            }
+
             Configuration = builder.Build();
         }
 
