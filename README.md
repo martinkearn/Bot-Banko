@@ -1,4 +1,7 @@
 # Banko
+
+**This repo is based on a preview version of the Bot Framework and is not a good reference right now. Work is undereway to upgrade to the final version and this message will be removed when that work is complete. Use the official samples in the meantime: https://github.com/Microsoft/BotBuilder-Samples**
+
 This is a very simple bot used to demonstrate several [Cognitive Services Luis](https://azure.microsoft.com/en-us/services/cognitive-services/language-understanding-intelligent-service/) capabilities with the [C# Bot Framework V4 SDK](https://docs.microsoft.com/en-us/azure/bot-service/?view=azure-bot-service-4.0) and [Azure Bot Service](https://azure.microsoft.com/en-us/services/bot-service/). 
 
 This was written in July 2018 whilst the V4 SDK is still 'preview' so may not be accurate in the future.
@@ -34,6 +37,6 @@ To make a transfer, the user must provide four different entities. These can be 
 The Make a Transfer feature can be invoked using natural language including some, all or none or the required entities. Here are some examples:
 * __"I want to make a transfer"__; the `Transfer` intent without any entities.
 * __"Transfer from the joint account"__; the `Transfer` intent with the `AccountLabel` entity.
-* __"Transfer £20 from the joint account"__; the `Transfer` intent with the `AccountLabel` and `Money` entities.
-* __"Transfer £20 from the joint account on saturday"__; the `Transfer` intent with the `AccountLabel`, `Money` and `Date` entities.
-* __"Transfer £20 from the joint account to martin kearn on saturday"__; the `Transfer` intent with the `AccountLabel`, `Money`, `Date` and `Payee` entities.
+* __"Transfer Â£20 from the joint account"__; the `Transfer` intent with the `AccountLabel` and `Money` entities.
+* __"Transfer Â£20 from the joint account on saturday"__; the `Transfer` intent with the `AccountLabel`, `Money` and `Date` entities.
+* __"Transfer Â£20 from the joint account to martin kearn on saturday"__; the `Transfer` intent with the `AccountLabel`, `Money`, `Date` and `Payee` entities.
