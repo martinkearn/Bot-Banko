@@ -1,6 +1,6 @@
 # Banko
 
-**This repo is based on a preview version of the Bot Framework and is not a good reference right now. Work is undereway to upgrade to the final version and this message will be removed when that work is complete. Use the official samples in the meantime: https://github.com/Microsoft/BotBuilder-Samples**
+**This repo is based on a preview version of the Bot Framework and is not a good reference right now. Work is underway to upgrade to the final version and this message will be removed when that work is complete. Use the official samples in the meantime: https://github.com/Microsoft/BotBuilder-Samples**
 
 This is a very simple bot used to demonstrate several [Cognitive Services Luis](https://azure.microsoft.com/en-us/services/cognitive-services/language-understanding-intelligent-service/) capabilities with the [C# Bot Framework V4 SDK](https://docs.microsoft.com/en-us/azure/bot-service/?view=azure-bot-service-4.0) and [Azure Bot Service](https://azure.microsoft.com/en-us/services/bot-service/). 
 
